@@ -1,15 +1,14 @@
 #!/usr/bin/env bash
 set -eo pipefail; [[ -n "$PLUSHU_TRACE" ]] && set -x
 
-i=0
+if [[ -z "$PLUSHU_BUILDPACKS_DIR" ]]; then
+  echo "No buildpacks dir defined; aborting." >&2
+  exit 1
+fi
 
-for buildpack in ddollar/heroku-buildpack-multi \
-  heroku/heroku-buildpack-ruby heroku/heroku-buildpack-nodejs \
-  heroku/heroku-buildpack-java heroku/heroku-buildpack-play \
-  heroku/heroku-buildpack-python heroku/heroku-buildpack-scala \
-  heroku/heroku-buildpack-clojure heroku/heroku-buildpack-gradle \
-  heroku/heroku-buildpack-grails CHH/heroku-buildpack-php \
-  kr/heroku-buildpack-go oortcloud/heroku-buildpack-meteorite \
+i=`ls -f "$PLUSHU_BUILDPACKS_DIR" | wc -l`
+
+for buildpack in oortcloud/heroku-buildpack-meteorite \
   miyagawa/heroku-buildpack-perl igrigorik/heroku-buildpack-dart \
   rhy-jot/buildpack-nginx Kloadut/heroku-buildpack-static-apache \
   bacongobbler/heroku-buildpack-jekyll
